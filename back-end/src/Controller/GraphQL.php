@@ -3,12 +3,7 @@
 
 
 namespace App\Controller;
-
-
-$host = '127.0.0.1';  
-$dbname = 'shop';     
-$user = 'root';       
-$pass = 'password';     
+  
 
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\ObjectType;
@@ -22,7 +17,7 @@ use App\Database\Database;
 class GraphQL {
 
     private static $db;
-
+    
     
     public static function init() {
         self::$db = (new Database())->getConnection();
@@ -42,6 +37,12 @@ class GraphQL {
                 ]
             ]);
 
+            $CategoryType = new ObjectType([
+                'name' => 'ProductCategory',
+                    'fields' => [
+                    'name' => Type::nonNull(Type::string())
+                    ]
+            ]);
 
             $productType = new ObjectType([
                 'name' => 'Product',
@@ -70,12 +71,7 @@ class GraphQL {
                         }
                     ],
                     'category' => [
-                        'type' => new ObjectType([
-                            'name' => 'ProductCategory',
-                            'fields' => [
-                                'name' => Type::nonNull(Type::string())
-                            ]
-                        ]),
+                        'type' => Type::listOf(Type::string($CategoryType)),
                         'resolve' => function ($product) {
                             $stmt = self::$db->prepare("SELECT name FROM categories WHERE id = :id");
                             $stmt->execute([':id' => $product['category_id']]);
