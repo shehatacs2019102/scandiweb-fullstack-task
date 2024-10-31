@@ -38,7 +38,7 @@ for (let i = 0; i < keys.length ; i++) {
    
 
 }
-fetch('http://shehatacs322.serv00.net:54767/graphql', {
+fetch('http://localhost:8000/graphql', {
   method: 'POST',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({

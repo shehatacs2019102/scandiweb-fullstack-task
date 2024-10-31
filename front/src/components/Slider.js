@@ -20,7 +20,7 @@ class Slider extends Component {
     const {id} = this.props;
 
     if(id){
-    fetch('http://shehatacs322.serv00.net:54767/graphql', {
+    fetch('http://localhost:8000/graphql', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -50,7 +50,7 @@ componentDidUpdate(prevProps){
 
     if(id){
 
-      fetch('http://shehatacs322.serv00.net:54767/graphql', {
+      fetch('http://localhost:8000/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

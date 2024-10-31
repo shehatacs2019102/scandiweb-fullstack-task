@@ -16,11 +16,11 @@
     
     componentDidMount() {
   
-      fetch('http://shehatacs322.serv00.net:54767/graphql', {
+      fetch('http://localhost:8000/graphql', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          query: "{ getProducts { id name currency_symbol amount attributes { id name value } gallery in_stock category { name } } }"
+          query: "{ getProducts { id name currency_symbol amount attributes { id name value } gallery in_stock category {name} } }"
         })
       }) 
         .then(res => res.json())
@@ -144,15 +144,16 @@
           
         ))
           : this.state.products.filter((product)=>(product.category['name']===activeCategory)).map((product,index)=>(
-
+              
               product.in_stock?
+              
               <div className='product-card'>
               <Link key={index} 
                     to={`product/${product.id}`} 
                     onClick={()=>{toggleProduct(product.id)}}  
                     className='link'
                     data-testid={`product-${product.name.toLowerCase().replaceAll(" ","-")}`}>  
-              
+              {console.log(activeCategory)}
                   <div  id={product.id} className={product.in_stock ? 'product-item-inStock' : 'product-item-outStock'} >
               
                           <div className='out-of-stock'>
@@ -168,7 +169,7 @@
                   </div>
                 
               </Link>
-                <button className='quick-shop'>
+                <button className='quick-shop' onClick={()=>{this.handleQuickShop(index)}}>
                 <img src={EmptyCart} alt='quick-shop'/>
             </button>
         </div>

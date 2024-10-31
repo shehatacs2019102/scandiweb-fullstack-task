@@ -71,7 +71,7 @@ class GraphQL {
                         }
                     ],
                     'category' => [
-                        'type' => Type::listOf(Type::string($CategoryType)),
+                        'type' => Type::nonNull($CategoryType),
                         'resolve' => function ($product) {
                             $stmt = self::$db->prepare("SELECT name FROM categories WHERE id = :id");
                             $stmt->execute([':id' => $product['category_id']]);
