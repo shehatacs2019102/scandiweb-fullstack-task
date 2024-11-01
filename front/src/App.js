@@ -76,7 +76,8 @@ class App extends Component {
                 <Route path="/:category" exact 
                        element={<ProductListingPage activeCategory={this.state.activeCategory} 
                                                                           toggleProduct={this.toggleProduct} 
-                                                                          isCartOpen={this.state.isCartOpen}/>}/>
+                                                                          isCartOpen={this.state.isCartOpen}
+                                                                          onCartOpen={this.toggleCart}/>}/>
 
                 <Route path="/:category/product/:id"  exact 
                        element={<ProductDetailsPage currentProductId={this.state.currentProductId}

@@ -37,7 +37,7 @@ class Header extends Component {
         
         <div className="cart">
 
-              <button data-testid="cart-btn" onClick={onCartOpen}>
+              <button data-testid="cart-btn" onClick={onCartOpen} >
 
                     <img src={EmptyCart} alt="empty-cart"/>{JSON.parse(localStorage.getItem("products-stored")) && <span>{JSON.parse(localStorage.getItem("products-stored")).length }</span>}
 

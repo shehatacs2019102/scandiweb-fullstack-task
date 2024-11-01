@@ -59,53 +59,55 @@ fetch('http://localhost:8000/graphql', {
    
   }
  
-  handelIncrement = (tag) =>{
+  handelIncrement = (tag,choices) =>{
 
-    
-   const update = this.state.cartItems? this.state.cartItems.map((item)=>{
 
-      if(item['tag'] === tag && item['quantity']<20){
-        item['quantity']++
-        
-
-      }
-
-      return item
-}
-
-) : ''
-
-localStorage.setItem('products-stored', JSON.stringify(update))
-
-console.log(update);
-this.setState({
-   cartItems: update
- })
-    }
-
-  handelDecrement = (tag) =>{
     const update = this.state.cartItems? this.state.cartItems.map((item)=>{
+       const currentvalues=JSON.stringify(Object.values(choices))
+       const othervalues=JSON.stringify(Object.values(item["selected-choices"]))
+       if(item['tag'] === tag && item['quantity']<20 && currentvalues===othervalues ){
+ 
+         item['quantity']++
+ 
+ 
+       }
+ 
+       return item
+ }
+ 
+ ) : ''
+ 
+ localStorage.setItem('products-stored', JSON.stringify(update))
+ 
+ this.setState({
+    cartItems: update
+  })
+     }
 
-      if(item['tag'] === tag && item['quantity']>1){
-        item['quantity']--
-        
-
-      }
-
-      return item
-}
-
-) : ''
-
-localStorage.setItem('products-stored', JSON.stringify(update))
-
-console.log(update);
-this.setState({
-   cartItems: update
- })
-
-    
+     handelDecrement = (tag,choices) =>{
+      const update = this.state.cartItems? this.state.cartItems.map((item)=>{
+        const currentvalues=JSON.stringify(Object.values(choices))
+        const othervalues=JSON.stringify(Object.values(item["selected-choices"]))
+        if(item['tag'] === tag && item['quantity']>1 && currentvalues===othervalues ){
+          item['quantity']--
+  
+  
+        }
+  
+        return item
   }
+  
+  ) : ''
+  
+  localStorage.setItem('products-stored', JSON.stringify(update))
+  
+  console.log(update);
+  this.setState({
+     cartItems: update
+   })
+  
+  
+    }
 
   render() {
     const { cartItems } = this.state;
@@ -172,9 +174,9 @@ this.setState({
               ) : ''}
 
                   <div className='quantity'>
-                      <button className='quantity-button' id = {item['tag']} onClick={(e)=>{this.handelIncrement(e.target.id)}} data-testid='cart-item-amount-increase'>+</button>
+                      <button className='quantity-button' id = {item['tag']} onClick={(e)=>{this.handelIncrement(e.target.id,item['selected-choices'])}} data-testid='cart-item-amount-increase'>+</button>
                       <h3 data-testid='cart-item-amount' >{item.quantity}</h3>
-                      <button className='quantity-button' id = {item['tag']} onClick={(e)=>{this.handelDecrement(e.target.id)}} data-testid='cart-item-amount-decrease' >-</button>
+                      <button className='quantity-button' id = {item['tag']} onClick={(e)=>{this.handelDecrement(e.target.id,item['selected-choices'])}} data-testid='cart-item-amount-decrease' >-</button>
                   </div>
 
               </div>

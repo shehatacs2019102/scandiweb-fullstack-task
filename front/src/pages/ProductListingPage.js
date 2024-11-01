@@ -35,11 +35,14 @@
     }
 
 
-    handleQuickShop = (index) => {
+    handleQuickShop = (id) => {
+      const {onCartOpen}=this.props;
+
       const { products } = this.state;
       const storedProducts = JSON.parse(localStorage.getItem("products-stored")) || [];
     
-      const product = products[index];
+      // const product = products[index];
+      const [product] = products.filter((product)=>{return product["id"]===id});
     
       // Create a unique default selection by using the first value of each attribute.
       const defaultSelectedChoices = {};
@@ -77,11 +80,14 @@
     
       // Save the updated cart back to local storage.
       localStorage.setItem("products-stored", JSON.stringify(storedProducts));
+
+      onCartOpen();
     };
     
     render() {
 
       const {activeCategory,toggleProduct,isCartOpen}=this.props
+
 
       return (
         
@@ -124,7 +130,7 @@
                           
 
                       </Link>
-                      <button className='quick-shop' onClick={()=>{this.handleQuickShop(index)}}>
+                      <button className='quick-shop' onClick={()=>{this.handleQuickShop(product.id)}}>
                               <img src={EmptyCart} alt='quick-shop'/>
                           </button>
                       </div>
@@ -169,7 +175,7 @@
                   </div>
                 
               </Link>
-                <button className='quick-shop' onClick={()=>{this.handleQuickShop(index)}}>
+                <button className='quick-shop' onClick={()=>{this.handleQuickShop(product.id)}}>
                 <img src={EmptyCart} alt='quick-shop'/>
             </button>
         </div>
