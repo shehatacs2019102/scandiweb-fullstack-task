@@ -54,54 +54,7 @@ class CartOverlay extends Component {
       });
   };
 
-  handelIncrement = (tag, choices) => {
-    const update = this.state.cartItems
-      ? this.state.cartItems.map((item) => {
-          const currentvalues = JSON.stringify(Object.values(choices));
-          const othervalues = JSON.stringify(
-            Object.values(item["selected-choices"])
-          );
-          if (
-            item["tag"] === tag &&
-            item["quantity"] < 20 &&
-            currentvalues === othervalues
-          ) {
-            item["quantity"]++;
-          }
-
-          return item;
-        })
-      : "";
-
-    localStorage.setItem("products-stored", JSON.stringify(update));
-
-    this.setState({
-      cartItems: update,
-    });
-  };
-
-  handelDecrement = (tag, choices) => {
-    const update = this.state.cartItems
-      ? this.state.cartItems.map((item) => {
-          const currentvalues = JSON.stringify(Object.values(choices));
-          const othervalues = JSON.stringify(
-            Object.values(item["selected-choices"])
-          );
-          if (
-            item["tag"] === tag &&
-            item["quantity"] > 1 &&
-            currentvalues === othervalues
-          ) {
-            item["quantity"]--;
-          }
-
-          return item;
-        })
-      : "";
-
-    localStorage.setItem("products-stored", JSON.stringify(update));
-
-    console.log(update);
+  handleUpdate = (update) => {
     this.setState({
       cartItems: update,
     });
@@ -127,8 +80,8 @@ class CartOverlay extends Component {
                 <CartItem
                   Item={item}
                   Index={index}
-                  handelDecrement={this.handelDecrement}
-                  handelIncrement={this.handelIncrement}
+                  CartItems={cartItems}
+                  handleUpdate={this.handleUpdate}
                 />
               ))
             : ""}

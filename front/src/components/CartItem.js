@@ -1,66 +1,63 @@
 import React, { Component } from "react";
-import './CartOverlayStyle.css';
+import "./CartOverlayStyle.css";
 export default class CartItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
+  handelIncrement = (tag, choices) => {
+    const { CartItems, handleUpdate } = this.props;
+    const update = CartItems
+      ? CartItems.map((item) => {
+          const currentvalues = JSON.stringify(Object.values(choices));
+          const othervalues = JSON.stringify(
+            Object.values(item["selected-choices"])
+          );
+          if (
+            item["tag"] === tag &&
+            item["quantity"] < 20 &&
+            currentvalues === othervalues
+          ) {
+            item["quantity"]++;
+          }
+
+          return item;
+        })
+      : "";
+
+    localStorage.setItem("products-stored", JSON.stringify(update));
+
+    handleUpdate(update);
+  };
+
+  handelDecrement = (tag, choices) => {
+    const { CartItems, handleUpdate } = this.props;
+    const update = CartItems
+      ? CartItems.map((item) => {
+          const currentvalues = JSON.stringify(Object.values(choices));
+          const othervalues = JSON.stringify(
+            Object.values(item["selected-choices"])
+          );
+          if (
+            item["tag"] === tag &&
+            item["quantity"] > 1 &&
+            currentvalues === othervalues
+          ) {
+            item["quantity"]--;
+          }
+
+          return item;
+        })
+      : "";
+
+    localStorage.setItem("products-stored", JSON.stringify(update));
+
+    handleUpdate(update);
+  };
 
   render() {
-    const { Item, Index, handelDecrement, handelIncrement } = this.props;
-    // handelIncrement = (tag, choices) => {
-    //     const update = cartItems
-    //       ? this.state.cartItems.map((item) => {
-    //           const currentvalues = JSON.stringify(Object.values(choices));
-    //           const othervalues = JSON.stringify(
-    //             Object.values(item["selected-choices"])
-    //           );
-    //           if (
-    //             item["tag"] === tag &&
-    //             item["quantity"] < 20 &&
-    //             currentvalues === othervalues
-    //           ) {
-    //             item["quantity"]++;
-    //           }
-    
-    //           return item;
-    //         })
-    //       : "";
-    
-    //     localStorage.setItem("products-stored", JSON.stringify(update));
-    
-    //     this.setState({
-    //       cartItems: update,
-    //     });
-    //   };
-    
-    //   handelDecrement = (tag, choices) => {
-    //     const update = cartItems
-    //       ? this.state.cartItems.map((item) => {
-    //           const currentvalues = JSON.stringify(Object.values(choices));
-    //           const othervalues = JSON.stringify(
-    //             Object.values(item["selected-choices"])
-    //           );
-    //           if (
-    //             item["tag"] === tag &&
-    //             item["quantity"] > 1 &&
-    //             currentvalues === othervalues
-    //           ) {
-    //             item["quantity"]--;
-    //           }
-    
-    //           return item;
-    //         })
-    //       : "";
-    
-    //     localStorage.setItem("products-stored", JSON.stringify(update));
-    
-    //     console.log(update);
-    //     this.setState({
-    //       cartItems: update,
-    //     });
-    //   };
-    
+    const { Item, Index } = this.props;
+
     return (
       <div key={Index} className="cart-item">
         <div className="cart-item-info">
@@ -144,7 +141,7 @@ export default class CartItem extends Component {
               className="quantity-button"
               id={Item["tag"]}
               onClick={(e) => {
-                handelIncrement(e.target.id, Item["selected-choices"]);
+                this.handelIncrement(e.target.id, Item["selected-choices"]);
               }}
               data-testid="cart-item-amount-increase"
             >
@@ -155,7 +152,7 @@ export default class CartItem extends Component {
               className="quantity-button"
               id={Item["tag"]}
               onClick={(e) => {
-                handelDecrement(e.target.id, Item["selected-choices"]);
+                this.handelDecrement(e.target.id, Item["selected-choices"]);
               }}
               data-testid="cart-item-amount-decrease"
             >
