@@ -3,7 +3,7 @@
 $host = '127.0.0.1';  
 $dbname = 'shop';    
 $user = 'root';       
-$pass = 'password';          
+$pass = 'password123';          
 
 try {
     

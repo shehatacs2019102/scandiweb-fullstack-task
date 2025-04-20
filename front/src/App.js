@@ -3,16 +3,17 @@ import Header from './components/Header';
 import './App.css';
 import ProductListingPage from './pages/ProductListingPage';
 import ProductDetailsPage from'./pages/ProductDetailsPage';
-import { BrowserRouter as Router, Route, Routes,Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes,Navigate, json } from 'react-router-dom';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       categories: [],
-      activeCategory: 'all',
+      activeCategory: JSON.parse(localStorage.getItem('CategoryActive')) || 'all',
       isCartOpen: false,
-      currentProductId:null,
+      currentProductId:JSON.parse(localStorage.getItem('CurrentID')) || null,
+      
     };
   }
 
@@ -43,6 +44,8 @@ class App extends Component {
   
   handleCategorySelect = (category) => {
     this.setState({ activeCategory: category });
+    localStorage.setItem('CategoryActive', JSON.stringify(category))
+    
   };
 
   toggleCart = () => {
@@ -54,6 +57,8 @@ class App extends Component {
   };
   toggleProduct=(currentProductId)=>{
     this.setState({currentProductId})
+    localStorage.setItem('CurrentID', JSON.stringify(currentProductId))
+    
   }
   
   render() {

@@ -159,7 +159,7 @@ class GraphQL {
                         ],
                         'resolve' => function ($root, $args)   {
                             try {
-                                $db = new \PDO("mysql:host=127.0.0.1;dbname=shop", 'root', 'password');
+                                $db = new \PDO("mysql:host=127.0.0.1;dbname=shop", 'root', 'password123');
                                 $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
                                 // Prepare and execute the insert statement

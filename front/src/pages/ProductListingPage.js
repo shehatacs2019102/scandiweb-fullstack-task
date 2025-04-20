@@ -1,207 +1,136 @@
-  import React, { Component } from 'react';
-  import './ProductListingPageStyle.css'
-  import { Link } from 'react-router-dom';
-  import EmptyCart from '../Assets/emptycart.svg'
+import React, { Component } from "react";
+import "./ProductListingPageStyle.css";
+import InStockItem from "../components/InStockItem";
+import OutStockItem from "../components/OutStockItem";
 
-
-
-  class ProductListingPage extends Component {
-
-    constructor(props) {
-      super(props);
-      this.state = {
-        products: [],
-      };
-    }
-    
-    componentDidMount() {
-  
-      fetch('http://localhost:8000/graphql', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          query: "{ getProducts { id name currency_symbol amount attributes { id name value } gallery in_stock category {name} } }"
-        })
-      }) 
-        .then(res => res.json())
-        .then( data =>
-          this.setState({
-            products: data.data.getProducts
-    })
-  
-  )     
-  
-  
-    }
-
-
-    handleQuickShop = (id) => {
-      const {onCartOpen}=this.props;
-
-      const { products } = this.state;
-      const storedProducts = JSON.parse(localStorage.getItem("products-stored")) || [];
-    
-      // const product = products[index];
-      const [product] = products.filter((product)=>{return product["id"]===id});
-    
-      // Create a unique default selection by using the first value of each attribute.
-      const defaultSelectedChoices = {};
-      [...product.attributes].reverse().forEach(attr => {
-        if (attr) {
-          // Select the first item as the default value for each attribute.
-          defaultSelectedChoices[attr.name] = attr.value;
-        }
-      }); 
-
-      const newProduct = {
-        tag: product.name || '',
-        price: product.amount || 0, 
-        symbol: product.currency_symbol || '',
-        gallery: product.gallery || [],
-        quantity: 1,
-        attributes: product.attributes || [],
-        attributeNames: product.attributes.map(attr => attr.name).filter((value, index, array) => array.indexOf(value) === index) || [],
-        "selected-choices": defaultSelectedChoices,
-      };
-    
-      // Check if a similar product already exists in local storage.
-      const productIndex = storedProducts.findIndex(
-        item =>
-          item.tag === newProduct.tag &&
-          JSON.stringify(item["selected-choices"]) === JSON.stringify(newProduct["selected-choices"])
-      );
-    
-      // If the product exists, increment quantity; otherwise, add it to the storage.
-      if (productIndex !== -1) {
-        storedProducts[productIndex].quantity += 1;
-      } else {
-        storedProducts.push(newProduct);
-      }
-    
-      // Save the updated cart back to local storage.
-      localStorage.setItem("products-stored", JSON.stringify(storedProducts));
-
-      onCartOpen();
+class ProductListingPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      products: [],
     };
-    
-    render() {
-
-      const {activeCategory,toggleProduct,isCartOpen}=this.props
-
-
-      return (
-        
-        <div className={`main-listing-page ${isCartOpen ? 'disabled' : ''}`}
-            style={{
-              opacity: isCartOpen ? 0.5 : 1,
-              pointerEvents: isCartOpen ? 'none' : 'auto',
-                
-              }}>
-
-
-              <h1 className='active-category'>{activeCategory.toUpperCase()}</h1>
-
-              <div className="product-list">
-
-
-              {activeCategory==="all"?this.state.products.map((product,index)=>(
-
-                      product.in_stock?
-                      <div className='product-card'>
-                      <Link key={index} 
-                            to={`product/${product.id}`} 
-                            onClick={()=>{toggleProduct(product.id)}}  
-                            className='link'
-                            data-testid={`product-${product.name.toLowerCase().replaceAll(" ","-")}`}>
-
-                          <div  id={product.id} className={product.in_stock ? 'product-item-inStock' : 'product-item-outStock'} >
-
-                          <div className='out-of-stock'>
-
-                                  <h2>Out Of Stock</h2>
-
-                          </div>
-
-                          <img src={product.gallery.split(' ').map(url => url.trim())[0].replace(/[[\]"]/g, '').slice(0, -1)} alt={product.id} className='product-image'/>
-                    
-                          <p className='product-attributes'> {product['name']}<br/><b>{product.currency_symbol}{product.amount}</b></p>
-
-                          </div>
-                          
-
-                      </Link>
-                      <button className='quick-shop' onClick={()=>{this.handleQuickShop(product.id)}}>
-                              <img src={EmptyCart} alt='quick-shop'/>
-                          </button>
-                      </div>
-            : <div  id={product.id} data-testid ={`product-${product.id}`} className={product.in_stock ? 'product-item-inStock' : 'product-item-outStock'} >
-
-              <div className='out-of-stock'>
-
-                  <h2>Out Of Stock</h2>
-
-              </div>
-
-              <img src={product.gallery.split(' ').map(url => url.trim())[0].replace(/[[\]"]/g, '').slice(0, -1)} alt={product.id} className='product-image'/>
-            
-              <p className='product-attributes'> {product['name']}<br/><b>{product.currency_symbol}{product.amount}</b></p>
-              
-              </div>
-          
-        ))
-          : this.state.products.filter((product)=>(product.category['name']===activeCategory)).map((product,index)=>(
-              
-              product.in_stock?
-              
-              <div className='product-card'>
-              <Link key={index} 
-                    to={`product/${product.id}`} 
-                    onClick={()=>{toggleProduct(product.id)}}  
-                    className='link'
-                    data-testid={`product-${product.name.toLowerCase().replaceAll(" ","-")}`}>  
-              {console.log(activeCategory)}
-                  <div  id={product.id} className={product.in_stock ? 'product-item-inStock' : 'product-item-outStock'} >
-              
-                          <div className='out-of-stock'>
-                                    
-                                <h2>Out Of Stock</h2>
-                          
-                          </div>
-            
-                  <img src={product.gallery.split(' ').map(url => url.trim())[0].replace(/[[\]"]/g, '').slice(0, -1)} alt={product.id} className='product-image'/>
-            
-                  <p className='product-attributes'> {product['name']}<br/><b>{product.currency_symbol}{product.amount}</b></p>
-                  
-                  </div>
-                
-              </Link>
-                <button className='quick-shop' onClick={()=>{this.handleQuickShop(product.id)}}>
-                <img src={EmptyCart} alt='quick-shop'/>
-            </button>
-        </div>
-
-          : <div  id={product.id} data-testid ={`product-${product.name.toLowerCase().replaceAll(" ","-")}`} className={product.in_stock ? 'product-item-inStock' : 'product-item-outStock'} >
-              
-                <div className='out-of-stock'>
-                
-                    <h2>Out Of Stock</h2>
-              
-                </div>
-            
-            <img src={product.gallery.split(' ').map(url => url.trim())[0].replace(/[[\]"]/g, '').slice(0, -1)} alt={product.id} className='product-image'/>
-            
-            <p className='product-attributes'> {product['name']}<br/><b>{product.currency_symbol}{product.amount}</b></p>
-            
-            
-          </div>
-          ))}
-      
-        </div>
-      
-      </div>  
-        
-      );
-    }
   }
-  
-  export default ProductListingPage;
+
+  componentDidMount() {
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query:
+          "{ getProducts { id name currency_symbol amount attributes { id name value } gallery in_stock category {name} } }",
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) =>
+        this.setState({
+          products: data.data.getProducts,
+        })
+      );
+  }
+
+  handleDisplayProduct = () => {
+    const { activeCategory, toggleProduct } = this.props;
+    const { products } = this.state;
+    let productInCategory = [];
+    switch (activeCategory) {
+      case "all":
+        productInCategory = products;
+        break;
+      default:
+        productInCategory = products.filter((product) => {
+          return product.category?.name === activeCategory;
+        });
+        break;
+    }
+    return productInCategory.map((item, i) => {
+      return item.in_stock ? (
+        <InStockItem
+          key={item.id}
+          toggleProduct={toggleProduct}
+          item={item}
+          index={i}
+          handleQuickShop={this.handleQuickShop}
+        />
+      ) : (
+        <OutStockItem key={item.id} index={i} item={item} />
+      );
+    });
+  };
+
+  handleQuickShop = (id) => {
+    const { onCartOpen } = this.props;
+
+    const { products } = this.state;
+    const storedProducts =
+      JSON.parse(localStorage.getItem("products-stored")) || [];
+
+    // const product = products[index];
+    const [product] = products.filter((product) => {
+      return product["id"] === id;
+    });
+
+    // Create a unique default selection by using the first value of each attribute.
+    const defaultSelectedChoices = {};
+    [...product.attributes].reverse().forEach((attr) => {
+      if (attr) {
+        // Select the first item as the default value for each attribute.
+        defaultSelectedChoices[attr.name] = attr.value;
+      }
+    });
+
+    const newProduct = {
+      tag: product.name || "",
+      price: product.amount || 0,
+      symbol: product.currency_symbol || "",
+      gallery: product.gallery || [],
+      quantity: 1,
+      attributes: product.attributes || [],
+      attributeNames:
+        product.attributes
+          .map((attr) => attr.name)
+          .filter((value, index, array) => array.indexOf(value) === index) ||
+        [],
+      "selected-choices": defaultSelectedChoices,
+    };
+
+    // Check if a similar product already exists in local storage.
+    const productIndex = storedProducts.findIndex(
+      (item) =>
+        item.tag === newProduct.tag &&
+        JSON.stringify(item["selected-choices"]) ===
+          JSON.stringify(newProduct["selected-choices"])
+    );
+
+    // If the product exists, increment quantity; otherwise, add it to the storage.
+    if (productIndex !== -1) {
+      storedProducts[productIndex].quantity += 1;
+    } else {
+      storedProducts.push(newProduct);
+    }
+
+    // Save the updated cart back to local storage.
+    localStorage.setItem("products-stored", JSON.stringify(storedProducts));
+
+    onCartOpen();
+  };
+
+  render() {
+    const { activeCategory, isCartOpen } = this.props;
+
+    return (
+      <div
+        className={`main-listing-page ${isCartOpen ? "disabled" : ""}`}
+        style={{
+          opacity: isCartOpen ? 0.5 : 1,
+          pointerEvents: isCartOpen ? "none" : "auto",
+        }}
+      >
+        <h1 className="active-category">{activeCategory.toUpperCase()}</h1>
+
+        <div className="product-list">{this.handleDisplayProduct()}</div>
+      </div>
+    );
+  }
+}
+
+export default ProductListingPage;
