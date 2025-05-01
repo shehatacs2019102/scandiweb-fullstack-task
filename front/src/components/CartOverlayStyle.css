@@ -7,7 +7,7 @@
     margin:0;
     position:absolute;
     top:62px;
-    left:75%;
+    left:68%;
     gap:32px;
     z-index: 9999;
     background-color: white;
@@ -220,4 +220,44 @@
     line-height: 25.6px;
     text-align: right;
     color: #1D1F22;
+}
+
+.total{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 28px;
+    width: 100%;
+    margin: 0;
+    
+}
+.total div {
+    
+    margin: 0 0;
+}
+
+.total:nth-child(1){
+
+    color: #1d1f22;
+    height: 19px;
+    width: 55px;
+    font-family: "Roboto", serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 18px;
+    text-align: left;
+    margin: 0;
+    
+}
+.total:nth-child(2){
+    
+  color: #1d1f22;
+  height: 26px;
+  width: 95px;
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 25.6px;
+  text-align: right;
+  margin: 0;
 }

@@ -1,10 +1,15 @@
 <?php
 
+require_once __DIR__ . '/./vendor/autoload.php';
 
-$host = '127.0.0.1';  
-$dbname = 'shop';     
-$user = 'root';       
-$pass = 'password123';           
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable(__DIR__ . "/.");
+$dotenv->load();
+$host = $_ENV['DB_HOST'];
+$dbname = $_ENV['DB_NAME'];
+$user = $_ENV['DB_USER'];
+$pass = $_ENV['DB_PASS'];
 
 try {
     
@@ -12,7 +17,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname`;
                 USE `$dbname`;");
-    
+
     $queries = [
         
         "CREATE TABLE IF NOT EXISTS categories (
@@ -20,7 +25,6 @@ try {
             name VARCHAR(255) NOT NULL
         )",
 
-    
         "CREATE TABLE IF NOT EXISTS products (
             id VARCHAR(255) PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
@@ -32,14 +36,12 @@ try {
             FOREIGN KEY (category_id) REFERENCES categories(id)
         )",
 
-        
         "CREATE TABLE IF NOT EXISTS attributes (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             type VARCHAR(255) NOT NULL
         )",
 
-        
         "CREATE TABLE IF NOT EXISTS attribute_values (
             id INT AUTO_INCREMENT PRIMARY KEY,
             attribute_id INT,
@@ -47,7 +49,6 @@ try {
             value VARCHAR(255),
             FOREIGN KEY (attribute_id) REFERENCES attributes(id)
         )",
-
         
         "CREATE TABLE IF NOT EXISTS product_attributes (
             product_id VARCHAR(255),
@@ -56,7 +57,6 @@ try {
             FOREIGN KEY (attribute_value_id) REFERENCES attribute_values(id)
         )",
 
-    
         "CREATE TABLE IF NOT EXISTS prices (
             id INT AUTO_INCREMENT PRIMARY KEY,
             product_id VARCHAR(255),
@@ -65,23 +65,17 @@ try {
             currency_symbol VARCHAR(5),
             FOREIGN KEY (product_id) REFERENCES products(id)
         )",
-        "CREATE TABLE IF NOT EXISTS orders (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    items VARCHAR(8000),
-    total_price DECIMAL(10,2) NOT NULL
-)   ;"
-    ];
 
+        "CREATE TABLE IF NOT EXISTS orders (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            items VARCHAR(8000),
+            total_price DECIMAL(10,2) NOT NULL
+        );"
+    ];
     
     foreach ($queries as $query) {
         $pdo->exec($query);
     }
-
-    echo "Database and tables created successfully.";
-
 } catch (PDOException $e) {
-    
     echo "Error: " . $e->getMessage();
 }
-?>
-

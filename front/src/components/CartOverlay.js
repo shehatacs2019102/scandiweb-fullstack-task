@@ -85,14 +85,21 @@ class CartOverlay extends Component {
                 />
               ))
             : ""}
+
           <div className="total" data-testid="cart-total">
+            <div> Total:  </div>
+            <div>
             {cartItems.length > 0 && cartItems
               ? cartItems
                   .reduce((total, item) => {
-                    return item["quantity"] * item["price"] + total;
+                    return  item["quantity"] * item["price"] + total ;
                   }, 0)
                   .toFixed(2)
-              : ""}
+              : ""} $
+              
+            </div>
+            
+            
           </div>
           <button onClick={this.HandleOrderInformation} className="place-order">
             Place Order
