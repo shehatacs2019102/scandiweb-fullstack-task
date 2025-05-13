@@ -90,7 +90,25 @@ div div .product-attributes {
   color: #8d8f9a;
 }
 
-@media screen and (min-width: 1600px) {
+@media screen and (max-width: 1500px) {
+  .product-card {
+    display: flex;
+    position: relative;
+    flex: 0 0 33.3333%;
+    justify-content: center;
+    margin: 0;
+    
+    
+  }
+  .main-listing-page {
+    width: 95vw;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+  
  
 }
 .product-card {

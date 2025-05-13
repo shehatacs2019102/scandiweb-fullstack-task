@@ -13,6 +13,8 @@ class Header extends Component {
       onCategorySelect,
       onCartOpen,
       isCartOpen,
+      handleCountChange,
+      cartCounter,
     } = this.props;
 
     return (
@@ -41,15 +43,22 @@ class Header extends Component {
         <div className="cart">
           <button data-testid="cart-btn" onClick={onCartOpen}>
             <img src={EmptyCart} alt="empty-cart" />
-            {JSON.parse(localStorage.getItem("products-stored")) && (
-              <span>
-                {JSON.parse(localStorage.getItem("products-stored")).length}
-              </span>
+            {JSON.parse(localStorage.getItem("cart-count")) > 0 ? (
+              <span>{cartCounter}</span>
+            ) : (
+              ""
             )}
           </button>
         </div>
 
-        {isCartOpen ? <CartOverlay /> : ""}
+        {isCartOpen ? (
+          <CartOverlay
+            onCartOpen={onCartOpen}
+            handleCountChange={handleCountChange}
+          />
+        ) : (
+          ""
+        )}
       </header>
     );
   }

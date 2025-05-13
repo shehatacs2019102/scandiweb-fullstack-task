@@ -9,49 +9,51 @@ class CartOverlay extends Component {
       cartItems: JSON.parse(localStorage.getItem("products-stored")) || [],
     };
   }
-  order = {};
+
   HandleOrderInformation = () => {
-    const keys = Object.keys(this.state.cartItems);
+    const { onCartOpen, handleCountChange } = this.props;
+    const { cartItems } = this.state;
     let products = [];
     let total = 0;
-    for (let i = 0; i < keys.length; i++) {
-      products.push(" product:", this.state.cartItems[i]["tag"]);
-      products.push(" price:", this.state.cartItems[i]["price"]);
-      products.push(" quantity:", this.state.cartItems[i]["quantity"]);
-      total =
-        total +
-        this.state.cartItems[i]["quantity"] * this.state.cartItems[i]["price"];
-      const productKeys = Object.keys(this.state.cartItems[i]);
-      for (let j = 0; j < productKeys.length - 1; j++) {
-        if (this.state.cartItems[i]["attributeNames"][j]) {
-          products.push(" ", this.state.cartItems[i]["attributeNames"][j], ":");
-          products.push(
-            this.state.cartItems[i]["selected-choices"][
-              this.state.cartItems[i]["attributeNames"][j]
-            ]
-          );
-        }
-      }
-    }
-    fetch("http://localhost:8000/graphql", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        query: `mutation {createOrder(items: "${products.join(
-          ""
-        )}" , total_price: ${total}){items total_price} }`,
-      }),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        localStorage.setItem("products-stored", JSON.stringify([]));
+    cartItems.forEach((item) => {
+      total += item.quantity * item.price;
 
-        this.setState({
-          cartItems: [],
-        });
-        console.log("thisi s product array", products);
-        //
-      });
+      const itemDescription = [
+        `product: ${item.tag}`,
+        `price: ${item.price}`,
+        `quantity: ${item.quantity}`,
+        ...item.attributeNames.map(
+          (header) => `${header}: ${item["selected-choices"][header]}`
+        ),
+      ].join(", ");
+
+      products.push(itemDescription);
+    });
+    if (products.length > 0) {
+      fetch("http://localhost:8000/graphql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `mutation {
+          createOrder(items: "${products.join("; ")}", total_price: ${total}) {
+            items
+            total_price
+          }
+        }`,
+        }),
+      })
+        .then(() => {
+          localStorage.setItem("products-stored", JSON.stringify([]));
+          localStorage.setItem("cart-count", 0);
+          handleCountChange();
+          onCartOpen();
+          this.setState({ cartItems: [] });
+          {
+            console.log("button pressed");
+          }
+        })
+        .catch((error) => console.error("Error placing order:", error));
+    }
   };
 
   handleUpdate = (update) => {
@@ -62,7 +64,7 @@ class CartOverlay extends Component {
 
   render() {
     const { cartItems } = this.state;
-
+    const { handleCountChange } = this.props;
     return (
       <div className="cart-wrapper" data-testid="cart-overlay">
         <div className="cart-holder">
@@ -82,24 +84,23 @@ class CartOverlay extends Component {
                   Index={index}
                   CartItems={cartItems}
                   handleUpdate={this.handleUpdate}
+                  handleCountChange={handleCountChange}
                 />
               ))
             : ""}
 
           <div className="total" data-testid="cart-total">
-            <div> Total:  </div>
+            <div> Total: </div>
             <div>
-            {cartItems.length > 0 && cartItems
-              ? cartItems
-                  .reduce((total, item) => {
-                    return  item["quantity"] * item["price"] + total ;
-                  }, 0)
-                  .toFixed(2)
-              : ""} $
-              
+              {cartItems.length > 0 && cartItems
+                ? cartItems
+                    .reduce((total, item) => {
+                      return item["quantity"] * item["price"] + total;
+                    }, 0)
+                    .toFixed(2)
+                : ""}{" "}
+              $
             </div>
-            
-            
           </div>
           <button onClick={this.HandleOrderInformation} className="place-order">
             Place Order

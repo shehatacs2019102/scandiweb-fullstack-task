@@ -20,8 +20,7 @@ function checkdataexits ()
     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 }
 
-if (count(checkdataexits()) < 1) 
-{
+if (count(checkdataexits()) < 1) {
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -29,17 +28,16 @@ if (count(checkdataexits()) < 1)
         $data = json_decode($jsonData, true);
         $categories = $data['data']['categories'];
 
-        foreach ($categories as $category) 
-        {
+        foreach ($categories as $category) {
             $stmt = $pdo->prepare("INSERT INTO categories (name) VALUES (:name)");
             $stmt->execute([':name' => $category['name']]);
         }
 
         $products = $data['data']['products'];
                 
-        foreach ($products as $product) 
-        {    
-            $stmt = $pdo->prepare("INSERT INTO products (id, name, description, in_stock, gallery, category_id, brand) 
+        foreach ($products as $product) {    
+            $stmt = $pdo->prepare("INSERT INTO products (id, name, description, 
+                                   in_stock, gallery, category_id, brand) 
                                    VALUES (:id, :name, :description, :in_stock, :gallery, 
                                    (SELECT id FROM categories WHERE name = :category), :brand)");
             $stmt->execute([
@@ -52,8 +50,7 @@ if (count(checkdataexits()) < 1)
                 ':brand' => $product['brand']
             ]);
      
-            foreach ($product['attributes'] as $attributeSet) 
-            {   
+            foreach ($product['attributes'] as $attributeSet) {   
                 $stmt = $pdo->prepare("INSERT INTO attributes (name, type) VALUES (:name, :type)
                                        ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)");
                 $stmt->execute([':name' => $attributeSet['name'], ':type' => $attributeSet['type']]);
@@ -87,8 +84,8 @@ if (count(checkdataexits()) < 1)
                 ]);
             }
         }
-        echo "Data insertion is done :)!";
+    echo "Data insertion is done :)!";
     } catch (PDOException $e) {  
-      echo "Error: " . $e->getMessage();
+        echo "Error: " . $e->getMessage();
     }
 }

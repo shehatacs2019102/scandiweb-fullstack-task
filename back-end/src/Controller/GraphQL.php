@@ -57,7 +57,7 @@ class GraphQL
                                 if (!$orderId) {
                                     throw new RuntimeException('Failed to retrieve last insert ID');
                                 }
-                                echo "Success";
+                                
                                 $stmtproductfetch = $db->prepare('SELECT id, items,total_price FROM orders WHERE id = ?');
                                 $stmtproductfetch->execute([$orderId]);
                                 $stmtproductfetch = $stmtproductfetch->fetch(\PDO::FETCH_ASSOC);

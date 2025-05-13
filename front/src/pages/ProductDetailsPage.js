@@ -151,7 +151,7 @@ class ProductDetailsPage extends Component {
   };
 
   render() {
-    const { isCartOpen, onCartOpen } = this.props;
+    const { isCartOpen, onCartOpen, handleCountChange } = this.props;
     const { attributeNames, product, selectedChoices } = this.state;
     return (
       <div
@@ -190,6 +190,7 @@ class ProductDetailsPage extends Component {
             onClick={() => {
               this.handleAddToCart();
               onCartOpen();
+              handleCountChange();
             }}
           >
             Add to cart

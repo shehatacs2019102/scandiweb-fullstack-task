@@ -6,7 +6,7 @@ export default class CartItem extends Component {
     this.state = {};
   }
   handelIncrement = (tag, choices) => {
-    const { CartItems, handleUpdate } = this.props;
+    const { CartItems, handleUpdate, handleCountChange } = this.props;
     const update = CartItems
       ? CartItems.map((item) => {
           const currentvalues = JSON.stringify(Object.values(choices));
@@ -28,10 +28,11 @@ export default class CartItem extends Component {
     localStorage.setItem("products-stored", JSON.stringify(update));
 
     handleUpdate(update);
+    handleCountChange();
   };
 
   handelDecrement = (tag, choices) => {
-    const { CartItems, handleUpdate } = this.props;
+    const { CartItems, handleUpdate, handleCountChange } = this.props;
     const update = CartItems
       ? CartItems.map((item) => {
           const currentvalues = JSON.stringify(Object.values(choices));
@@ -53,6 +54,7 @@ export default class CartItem extends Component {
     localStorage.setItem("products-stored", JSON.stringify(update));
 
     handleUpdate(update);
+    handleCountChange();
   };
 
   render() {

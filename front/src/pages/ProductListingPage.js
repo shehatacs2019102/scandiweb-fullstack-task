@@ -58,7 +58,7 @@ class ProductListingPage extends Component {
   };
 
   handleQuickShop = (id) => {
-    const { onCartOpen } = this.props;
+    const { onCartOpen, handleCountChange } = this.props;
 
     const { products } = this.state;
     const storedProducts =
@@ -112,6 +112,7 @@ class ProductListingPage extends Component {
     localStorage.setItem("products-stored", JSON.stringify(storedProducts));
 
     onCartOpen();
+    handleCountChange();
   };
 
   render() {
