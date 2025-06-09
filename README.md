@@ -1,5 +1,5 @@
 # scandiweb-fullstack-task
-1. change the dummy credintials in the .env file
+1. change the dummy credintials in the .env file to match your local mysql account
 2. run this command and make sure port 8000 on localhost is not used
 php -S localhost:8000 -t ./public/
 
