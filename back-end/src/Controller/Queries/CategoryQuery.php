@@ -3,26 +3,25 @@
 namespace App\Controller\Queries;
 
 use GraphQL\Type\Definition\Type;
-use App\Database\Database;
+use App\Models\Category;
 
 class CategoryQuery extends QueryClass 
 {
-    private static $db;
     public function __construct($typeObject)
     {
-        
-        self::$db = (new Database())->getConnection();
-        $this -> type = Type::listOf($typeObject);
-        $this -> resolve = function () {
-            $stmt = self::$db->query("SELECT * FROM categories");
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $categoryModel = new Category();
+
+        $this->type = Type::listOf($typeObject);
+        $this->resolve = function () use ($categoryModel) {
+            return $categoryModel->findAll();
         };
     }
+
     public function init()
     {
         return [
-            'type' => $this -> type,
-            'resolve' => $this ->resolve
+            'type' => $this->type,
+            'resolve' => $this->resolve
         ]; 
     }
 }
