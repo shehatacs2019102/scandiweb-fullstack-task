@@ -23,7 +23,7 @@ class ProductDetailsPage extends Component {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          query: `{getProductById(id:"${currentProductId}"){ id name  description brand amount gallery currency_symbol attributes { id name value }}}`,
+          query: `{getProductById(id:"${currentProductId}"){ id name  description brand amount gallery currency_symbol  attributes { id name value } in_stock }}`,
         }),
       })
         .then((res) => res.json())
@@ -32,11 +32,16 @@ class ProductDetailsPage extends Component {
             product: data.data.getProductById,
             attributes: data.data.getProductById.attributes,
             attributeNames: data.data.getProductById.attributes
+           
+            
+
               .map((value) => {
                 return value.name;
               })
               .filter((value, index, array) => {
+                
                 return array.indexOf(value) === index;
+                
               }),
           })
         )
@@ -177,7 +182,7 @@ class ProductDetailsPage extends Component {
             </div>
           </div>
 
-          <button
+          {/* <button
             className="add-to-cart"
             disabled={
               selectedChoices
@@ -194,7 +199,25 @@ class ProductDetailsPage extends Component {
             }}
           >
             Add to cart
-          </button>
+          </button> */}
+          <button
+  className={`add-to-cart ${!product.in_stock ? "disabled" : ""}`}
+  disabled={
+    !product.in_stock ||
+    (selectedChoices
+      ? Object.keys(selectedChoices).length !== attributeNames.length
+      : true)
+  }
+  data-testid="add-to-cart"
+  onClick={() => {
+    this.handleAddToCart();
+    onCartOpen();
+    handleCountChange();
+  }}
+>
+  {!product.in_stock ? "OUT OF STOCK" : "Add to cart"}
+</button>
+
 
           <div className="description" data-testid="product-description">
             {this.removeHTMLTags(product.description)}

@@ -52,7 +52,7 @@ class ProductListingPage extends Component {
           handleQuickShop={this.handleQuickShop}
         />
       ) : (
-        <OutStockItem key={item.id} index={i} item={item} />
+        <OutStockItem key={item.id} index={i} toggleProduct = {toggleProduct} item={item} />
       );
     });
   };

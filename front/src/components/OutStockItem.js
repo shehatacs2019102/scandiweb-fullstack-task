@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "../pages/ProductListingPageStyle.css";
+import { Link } from "react-router-dom";
 export default class OutStockItem extends Component {
   constructor(props) {
     super(props);
@@ -7,9 +8,22 @@ export default class OutStockItem extends Component {
   }
 
   render() {
-    const { key, index, item } = this.props;
+    const { key, index, item, toggleProduct } = this.props;
+    
     return (
       <div className="product-card">
+
+        <Link
+                  key={index}
+                  to={`product/${item.id}`}
+                  onClick={() => {
+                    toggleProduct(item.id);
+                  }}
+                  className="link"
+                  data-testid={`product-${item.name
+                    .toLowerCase()
+                    .replaceAll(" ", "-")}`}
+                >
         <div
         id={key}
         data-testid={`product-${item.id}`}
@@ -41,6 +55,7 @@ export default class OutStockItem extends Component {
           </p>
         
       </div>
+      </Link>
       </div>
       
     );
