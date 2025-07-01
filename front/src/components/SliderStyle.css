@@ -12,6 +12,7 @@
     align-items: flex-start;
     justify-content: center;
     flex-flow:row wrap;
+   
 
 }
 
@@ -23,8 +24,11 @@
     justify-content: center;
     justify-self: center;
     align-self: flex-start;
+    
 }
-
+.slider-container img{
+     object-fit: contain;
+}
 .slide {
     display: none;
     width: 100%;

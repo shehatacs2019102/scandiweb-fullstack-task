@@ -214,6 +214,7 @@ class ProductDetailsPage extends Component {
     onCartOpen();
     handleCountChange();
   }}
+  style={{background: !product.in_stock ? "gray" : "#5ece7b" }}
 >
   {!product.in_stock ? "OUT OF STOCK" : "Add to cart"}
 </button>

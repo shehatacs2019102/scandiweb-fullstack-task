@@ -75,6 +75,7 @@
 }
 
 div div .product-image {
+  object-fit: contain;
   width: 390px;
   height: 330px;
 }
