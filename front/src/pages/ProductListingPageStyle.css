@@ -20,12 +20,10 @@
   font-weight: 400;
   line-height: 67.2px;
   text-align: left;
-<<<<<<< HEAD
+
   width: 300px;
   margin-left: 100px;
-=======
-  width: 1440px;
->>>>>>> 0cdc6570b700a4dc64bb2b0afcb933b38903c2ab
+
 }
 .product-list {
   display: flex;
