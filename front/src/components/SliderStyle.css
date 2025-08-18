@@ -1,0 +1,101 @@
+
+.gallery-container{
+    display: flex;
+    margin: 0 0 0 30px;
+    gap:30px;
+    
+}
+.slider { 
+    width: 500px;
+    height:478px;
+    margin: 20px 0 0 0;
+    display:flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-flow:row wrap;
+   
+
+}
+
+.slider-container {
+    overflow: hidden;
+    width:50%;
+    height:100%;
+    display:flex;
+    justify-content: center;
+    justify-self: center;
+    align-self: flex-start;
+    
+}
+.slider-container img{
+     object-fit: contain;
+}
+.slide {
+    display: none;
+    width: 100%;
+}
+
+.active-slide {
+    display: block;
+}
+
+.prev, .next {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    z-index: 1;
+    margin:0;
+    align-self: center;
+
+}
+
+.prev {
+    margin-left: 50px;
+}
+
+.next {
+    margin-right: 50px;
+}
+
+.thumbnails {
+    display: flex;
+    justify-content: center;
+    flex-flow: column nowrap;
+    margin:20px 0 0 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 478px;
+    gap:20px
+    
+    
+   
+    
+
+}
+.thumbnails::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+
+.thumbnails::-webkit-scrollbar-button:start:decrement,
+.thumbnails::-webkit-scrollbar-button:end:increment {
+  display: none;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    margin: 0 10px;
+    cursor: pointer;
+    opacity: 0.6;
+    object-fit: contain;
+}
+
+.thumbnail:hover, .active-thumbnail {
+    opacity: 1;
+}
