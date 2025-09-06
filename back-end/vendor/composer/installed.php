@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'scandiweb/fullstack',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '39bcb129210507b1feaaa593d06e3ac63d168964',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => 'a40d96d3c798ca028446e7a335173da45b4df734',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -38,9 +38,9 @@
             'dev_requirement' => false,
         ),
         'scandiweb/fullstack' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '39bcb129210507b1feaaa593d06e3ac63d168964',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'a40d96d3c798ca028446e7a335173da45b4df734',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
