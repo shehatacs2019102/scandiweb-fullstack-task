@@ -84,7 +84,7 @@ if (count(checkdataexits()) < 1) {
                 ]);
             }
         }
-    echo "Data insertion is done :)!";
+        echo "Data insertion is done :)!";
     } catch (PDOException $e) {  
         echo "Error: " . $e->getMessage();
     }
