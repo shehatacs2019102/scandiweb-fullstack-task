@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: *");
@@ -14,12 +15,14 @@ $dotenv->load();
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->post('/graphql', [App\Controller\GraphQL::class, 'handle']);
 });
-$routeInfo = $dispatcher->dispatch(
+$routeInfo = $dispatcher->dispatch
+(
     $_SERVER['REQUEST_METHOD'],
     $_SERVER['REQUEST_URI']
 );
    
-switch ($routeInfo[0]) {
+switch ($routeInfo[0]) 
+{
     case FastRoute\Dispatcher::NOT_FOUND:
         // ... 404 Not Found
         break;

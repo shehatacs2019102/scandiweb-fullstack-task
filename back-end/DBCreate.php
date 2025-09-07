@@ -11,15 +11,15 @@ $dbname = $_ENV['DB_NAME'];
 $user = $_ENV['DB_USER'];
 $pass = $_ENV['DB_PASS'];
 
-try {
+try 
+{
     
     $pdo = new PDO("mysql:host=$host;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname`;
-                USE `$dbname`;");
-
-    $queries = [
-        
+    $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname`;USE `$dbname`;");
+                
+    $queries = 
+    [
         "CREATE TABLE IF NOT EXISTS categories (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL
@@ -73,9 +73,11 @@ try {
         );"
     ];
     
-    foreach ($queries as $query) {
+    foreach ($queries as $query) 
+    {
         $pdo->exec($query);
     }
-} catch (PDOException $e) {
+} catch (PDOException $e) 
+{
     echo "Error: " . $e->getMessage();
 }

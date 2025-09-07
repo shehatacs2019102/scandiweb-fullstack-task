@@ -17,7 +17,7 @@ class CategoryQuery extends QueryClass
         };
     }
 
-    public function init()
+    public function init(): array
     {
         return [
             'type' => $this->type,

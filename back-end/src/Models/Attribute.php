@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use PDO;
@@ -7,6 +9,9 @@ use App\Database\Database;
 
 class Attribute
 {
+    /**
+     * @var PDO
+     */
     private $db;
 
     public function __construct()
@@ -14,7 +19,11 @@ class Attribute
         $this->db = (new Database())->getConnection();
     }
 
-    public function getAttributesByProductId($productId)
+    /**
+     * @param string $productId
+     * @return array<int, array<string, mixed>>|false
+     */
+    public function getAttributesByProductId(string $productId)
     {
         $stmt = $this->db->prepare("
             SELECT a.id, a.name, av.value 

@@ -1,17 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Types;
 
+use App\Database\Database;
+use App\Models\Attribute;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
-use App\Models\Attribute;
-use App\Database\Database;
+use PDO;
 
-class ProductType extends TypeClass 
+
+class ProductType extends TypeClass
 {
-    public function __construct($productAttributeType, $CategoryType) {
+   
+    public function __construct(ObjectType $productAttributeType, ObjectType $categoryType)
+    {
         $attributeModel = new Attribute();
-        $db = (new Database())->getConnection(); // For category only (optional to move to model too)
+        $db = (new Database())->getConnection();
 
         $this->name = 'Product';
         $this->fields = [
@@ -24,25 +30,26 @@ class ProductType extends TypeClass
             'currency_symbol' => Type::string(),
             'in_stock' => Type::boolean(),
             'brand' => Type::string(),
-
             'attributes' => [
                 'type' => Type::listOf($productAttributeType),
-                'resolve' => function ($product) use ($attributeModel) {
+                'resolve' => static function (array $product) use ($attributeModel) {
                     return $attributeModel->getAttributesByProductId($product['id']);
-                }
+                },
             ],
-
             'category' => [
-                'type' => Type::nonNull($CategoryType),
-                'resolve' => function ($product) use ($db) {
+                'type' => Type::nonNull($categoryType),
+                'resolve' => static function (array $product) use ($db) {
                     $stmt = $db->prepare("SELECT name FROM categories WHERE id = :id");
                     $stmt->execute([':id' => $product['category_id']]);
-                    return $stmt->fetch(\PDO::FETCH_ASSOC);
-                }
+                    return $stmt->fetch(PDO::FETCH_ASSOC);
+                },
             ],
         ];
     }
 
+    /**
+     * Initializes and returns the Product ObjectType.
+     */
     public function init(): ObjectType
     {
         return new ObjectType([
