@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/./vendor/autoload.php';
 
 use Dotenv\Dotenv;
@@ -7,39 +9,47 @@ use App\Database\Database;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . "/.");
 $dotenv->load();
+
 $host = $_ENV['DB_HOST'];
 $dbname = $_ENV['DB_NAME'];
 $user = $_ENV['DB_USER'];
 $pass = $_ENV['DB_PASS'];
 
-function checkdataexits ()
+function checkDataExists ()
 {
     $db = (new Database())->getConnection();
     $stmt = $db->prepare("SELECT name FROM categories WHERE id = :id");
     $stmt->execute([':id' => 1]);
+
     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 }
 
-if (count(checkdataexits()) < 1) {
+if (count(checkDataExists()) < 1) {
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
         $jsonData = file_get_contents('data.json');
         $data = json_decode($jsonData, true);
+
         $categories = $data['data']['categories'];
 
         foreach ($categories as $category) {
-            $stmt = $pdo->prepare("INSERT INTO categories (name) VALUES (:name)");
+            $stmt = $pdo->prepare("INSERT INTO categories (name) VALUES (:name)"
+        );
             $stmt->execute([':name' => $category['name']]);
         }
 
         $products = $data['data']['products'];
                 
         foreach ($products as $product) {    
-            $stmt = $pdo->prepare("INSERT INTO products (id, name, description, 
-                                   in_stock, gallery, category_id, brand) 
-                                   VALUES (:id, :name, :description, :in_stock, :gallery, 
-                                   (SELECT id FROM categories WHERE name = :category), :brand)");
+            $stmt = $pdo->prepare(
+                "INSERT INTO products (id, name, description, 
+                in_stock, gallery, category_id, brand) 
+                VALUES (:id, :name, :description, :in_stock, :gallery, 
+                (SELECT id FROM categories WHERE name = :category), :brand)"
+            );
+
             $stmt->execute([
                 ':id' => $product['id'],
                 ':name' => $product['name'],
@@ -51,31 +61,51 @@ if (count(checkdataexits()) < 1) {
             ]);
      
             foreach ($product['attributes'] as $attributeSet) {   
-                $stmt = $pdo->prepare("INSERT INTO attributes (name, type) VALUES (:name, :type)
-                                       ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)");
-                $stmt->execute([':name' => $attributeSet['name'], ':type' => $attributeSet['type']]);
+                $stmt = $pdo->prepare(
+                    "INSERT INTO attributes (name, type) 
+                    VALUES (:name, :type)
+                    ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id)"
+                );
+
+                $stmt->execute([
+                    ':name' => $attributeSet['name'], 
+                    ':type' => $attributeSet['type']
+                ]);
+
                 $attributeId = $pdo->lastInsertId();
     
-                foreach ($attributeSet['items'] as $item) 
-                {
-                    $stmt = $pdo->prepare("INSERT INTO attribute_values (attribute_id, display_value, value)
-                                           VALUES (:attribute_id, :display_value, :value)");
+                foreach ($attributeSet['items'] as $item) {
+                    $stmt = $pdo->prepare(
+                        "INSERT INTO attribute_values (attribute_id, display_value, value)
+                        VALUES (:attribute_id, :display_value, :value)"
+                    );
+
                     $stmt->execute([
                         ':attribute_id' => $attributeId,
                         ':display_value' => $item['displayValue'],
                         ':value' => $item['value']
                     ]);
+
                     $attributeValueId = $pdo->lastInsertId();
-                    $stmt = $pdo->prepare("INSERT INTO product_attributes (product_id, attribute_value_id)
-                                           VALUES (:product_id, :attribute_value_id)");
-                    $stmt->execute([':product_id' => $product['id'], ':attribute_value_id' => $attributeValueId]);
+
+                    $stmt = $pdo->prepare(
+                        "INSERT INTO product_attributes (product_id, attribute_value_id)
+                        VALUES (:product_id, :attribute_value_id)"
+                    );
+
+                    $stmt->execute([
+                        ':product_id' => $product['id'], 
+                        ':attribute_value_id' => $attributeValueId
+                    ]);
                 }
             }
 
-            foreach ($product['prices'] as $price) 
-            {
-                $stmt = $pdo->prepare("INSERT INTO prices (product_id, amount, currency_label, currency_symbol) 
-                                       VALUES (:product_id, :amount, :currency_label, :currency_symbol)");
+            foreach ($product['prices'] as $price) {
+                $stmt = $pdo->prepare(
+                    "INSERT INTO prices (product_id, amount, currency_label, currency_symbol) 
+                    VALUES (:product_id, :amount, :currency_label, :currency_symbol)"
+                );
+                
                 $stmt->execute([
                     ':product_id' => $product['id'],
                     ':amount' => $price['amount'],

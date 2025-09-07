@@ -7,7 +7,6 @@ namespace App\Controller\Types;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-
 class OrderType extends TypeClass
 {
    

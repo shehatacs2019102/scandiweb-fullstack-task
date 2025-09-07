@@ -7,7 +7,6 @@ namespace App\Controller\Types;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-
 class AttributeType extends TypeClass
 {
    
@@ -30,7 +29,7 @@ class AttributeType extends TypeClass
         ];
     }
 
-   
+
     public function init(): ObjectType
     {
         return new ObjectType([

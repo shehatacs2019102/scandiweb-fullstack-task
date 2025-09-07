@@ -17,7 +17,6 @@ class Category
         $this->db = (new Database())->getConnection();
     }
 
-   
     public function findAll()
     {
         $stmt = $this->db->query("SELECT * FROM categories");

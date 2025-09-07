@@ -5,8 +5,8 @@ header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: *");
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once '../DBCreate.php';
-require_once '../DataInsertion.php';
+require_once '../DBsetup.php';
+require_once '../Seeder.php';
 
 use Dotenv\Dotenv;
 

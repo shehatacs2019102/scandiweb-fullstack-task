@@ -6,7 +6,6 @@ namespace App\Controller\Types;
 
 use GraphQL\Type\Definition\ObjectType;
 
-
 abstract class TypeClass
 {
    

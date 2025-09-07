@@ -10,9 +10,7 @@ use App\Models\Clothes;
 
 class ProductByIDQuery extends QueryClass
 {
-    /**
-     * @param mixed $productType
-     */
+    
     public function __construct($productType)
     {
         $techModel = new Tech();
