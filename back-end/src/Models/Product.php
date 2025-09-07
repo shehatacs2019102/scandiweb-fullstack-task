@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use PDO;
 use App\Database\Database;
 
-
 abstract class Product
 {
-    
-    protected $db;
-
    
+    protected PDO $db;
+
+    
     private const BASE_QUERY = "
         SELECT p.id, p.name, p.description, p.in_stock,
                p.gallery, p.brand,
@@ -24,36 +25,34 @@ abstract class Product
         JOIN categories c ON p.category_id = c.id
     ";
 
-    
-    abstract protected function getCategoryName(): string;
-
-   
     public function __construct()
     {
         $this->db = (new Database())->getConnection();
     }
 
    
-    public function findAll(): array
+    abstract protected function getCategoryName(): string;
+
+    
+    final public function findAll(): array
     {
         $sql = self::BASE_QUERY . " WHERE c.name = :category";
         $stmt = $this->db->prepare($sql);
         
-       
         $stmt->execute([':category' => $this->getCategoryName()]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
-
-    public function findById($id)
+   
+    final public function findById(string|int $id): array|false
     {
         $sql = self::BASE_QUERY . " WHERE p.id = :id AND c.name = :category";
         $stmt = $this->db->prepare($sql);
 
         $stmt->execute([
             ':id' => $id,
-            ':category' => $this->getCategoryName() // Uses the category from the child class
+            ':category' => $this->getCategoryName()
         ]);
         
         return $stmt->fetch(PDO::FETCH_ASSOC);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Queries;
 
 use GraphQL\Type\Definition\Type;
@@ -7,10 +9,11 @@ use GraphQL\Type\Definition\ObjectType;
 use App\Models\Tech;
 use App\Models\Clothes;
 
-class AllProductsQuery extends QueryClass 
+class AllProductsQuery extends QueryClass
 {
-    public function __construct($typeObject) {
-       
+    
+    public function __construct($typeObject)
+    {
         $classifiedProductsType = new ObjectType([
             'name' => 'ClassifiedProducts',
             'description' => 'A collection of products classified by category.',
@@ -25,23 +28,17 @@ class AllProductsQuery extends QueryClass
                 ]
             ]
         ]);
-        
-      
-        $this->type = $classifiedProductsType;
 
-     
+        $this->type = $classifiedProductsType;
         $this->args = [];
-        
-      
+
         $this->resolve = function ($root, $args) {
             $techModel = new Tech();
             $clothesModel = new Clothes();
 
-         
             $techProducts = $techModel->findAll();
             $clothesProducts = $clothesModel->findAll();
 
-           
             return [
                 'tech' => $techProducts,
                 'clothes' => $clothesProducts,
@@ -49,7 +46,8 @@ class AllProductsQuery extends QueryClass
         };
     }
 
-    public function init()
+    
+    public function init():array
     {
         return [
             'type' => $this->type,

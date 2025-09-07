@@ -1,11 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller\Types;
 
-abstract class TypeClass 
-{
-    public $name;
-    public $fields;
+use GraphQL\Type\Definition\ObjectType;
 
-    abstract public function init();
+
+abstract class TypeClass
+{
+   
+    public string $name;
+
+    
+    public array $fields;
+
+    
+    abstract public function init(): ObjectType;
 }
