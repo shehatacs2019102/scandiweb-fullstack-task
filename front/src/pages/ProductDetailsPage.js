@@ -184,24 +184,6 @@ class ProductDetailsPage extends Component {
             </div>
           </div>
 
-          {/* <button
-            className="add-to-cart"
-            disabled={
-              selectedChoices
-                ? Object.keys(selectedChoices).length === attributeNames.length
-                  ? false
-                  : true
-                : true
-            }
-            data-testid="add-to-cart"
-            onClick={() => {
-              this.handleAddToCart();
-              onCartOpen();
-              handleCountChange();
-            }}
-          >
-            Add to cart
-          </button> */}
           <button
   className={`add-to-cart ${!product.in_stock ? "disabled" : ""}`}
   disabled={
@@ -220,6 +202,14 @@ class ProductDetailsPage extends Component {
 >
   {!product.in_stock ? "OUT OF STOCK" : "Add to cart"}
 </button>
+
+          {product.in_stock &&
+            selectedChoices &&
+            Object.keys(selectedChoices).length !== attributeNames.length && (
+              <div className="select-options-warning" data-testid="select-options-warning">
+                Please select {attributeNames.filter((name) => !selectedChoices[name]).join(", ")} before adding to cart
+              </div>
+          )}
 
 
           <div className="description" data-testid="product-description">

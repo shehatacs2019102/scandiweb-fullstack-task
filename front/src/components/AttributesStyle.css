@@ -46,3 +46,8 @@
   outline: 2px solid #5ece7b;
   border: 2px solid white;
 }
+
+.required-asterisk {
+  color: #d10000;
+  margin-left: 4px;
+}

@@ -12,6 +12,7 @@ export default class StandardAttributes extends Component {
       <>
         <div key={headerIndex} className="attribute-tag">
           {header}
+          {!selectedChoices[header] && <span className="required-asterisk">*</span>}
         </div>
 
         <div className="attributes-variations">
