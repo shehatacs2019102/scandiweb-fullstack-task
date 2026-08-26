@@ -15,4 +15,4 @@ RUN composer install --no-dev --optimize-autoloader
 ENV PORT=10000
 EXPOSE 10000
 
-CMD php -d variables_order=EGPCS -S 0.0.0.0:$PORT -t public
+CMD sh -c "cp /etc/secrets/.env /app/.env 2>/dev/null; cp /etc/secrets/ca.pem /app/ca.pem 2>/dev/null; php -d variables_order=EGPCS -S 0.0.0.0:$PORT -t public"
