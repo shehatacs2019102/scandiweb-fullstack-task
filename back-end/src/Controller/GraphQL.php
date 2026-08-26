@@ -53,11 +53,15 @@ class GraphQL
                         ],
                         'resolve' => function ($root, $args) {
                             try {
-                                $host = $_ENV['DB_HOST'];
                                 $dbname = $_ENV['DB_NAME'];
                                 $user = $_ENV['DB_USER'];
                                 $pass = $_ENV['DB_PASS'];
-                                $db = new PDO("mysql:host=$host;dbname=$dbname", "$user", "$pass");
+                                $db = new PDO(
+                                    \App\Database\Database::buildDsn($dbname),
+                                    $user,
+                                    $pass,
+                                    \App\Database\Database::pdoOptions()
+                                );
                                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                                 $stmt = $db->prepare('INSERT INTO orders (items, total_price) VALUES (?, ?)');

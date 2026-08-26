@@ -10,7 +10,6 @@ use App\Database\Database;
 $dotenv = Dotenv::createImmutable(__DIR__ . "/.");
 $dotenv->load();
 
-$host = $_ENV['DB_HOST'];
 $dbname = $_ENV['DB_NAME'];
 $user = $_ENV['DB_USER'];
 $pass = $_ENV['DB_PASS'];
@@ -26,7 +25,7 @@ function checkDataExists ()
 
 if (count(checkDataExists()) < 1) {
     try {
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+        $pdo = new PDO(Database::buildDsn($dbname), $user, $pass, Database::pdoOptions());
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         $jsonData = file_get_contents('data.json');

@@ -5,18 +5,18 @@ declare(strict_types=1);
 require_once __DIR__ . '/./vendor/autoload.php';
 
 use Dotenv\Dotenv;
+use App\Database\Database;
 
 $dotenv = Dotenv::createImmutable(__DIR__ . "/.");
 $dotenv->load();
 
 
-$host = $_ENV['DB_HOST'];
 $dbname = $_ENV['DB_NAME'];
 $user = $_ENV['DB_USER'];
 $pass = $_ENV['DB_PASS'];
 
 try {
-    $pdo = new PDO("mysql:host=$host;charset=utf8", $user, $pass);
+    $pdo = new PDO(Database::buildDsn(), $user, $pass, Database::pdoOptions());
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname`;USE `$dbname`;");
                 
@@ -54,6 +54,7 @@ try {
         "CREATE TABLE IF NOT EXISTS product_attributes (
             product_id VARCHAR(255),
             attribute_value_id INT,
+            PRIMARY KEY (product_id, attribute_value_id),
             FOREIGN KEY (product_id) REFERENCES products(id),
             FOREIGN KEY (attribute_value_id) REFERENCES attribute_values(id)
         )",

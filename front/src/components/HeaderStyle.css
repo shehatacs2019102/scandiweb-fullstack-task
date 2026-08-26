@@ -76,3 +76,39 @@ header .cart button span{
 .link{
     display:flex;
 }
+
+@media screen and (max-width: 768px) {
+    header {
+        width: 92vw;
+        flex-wrap: wrap;
+        position: relative;
+        padding: 16px 0;
+        row-gap: 12px;
+    }
+    header img {
+        order: 1;
+        margin: 0 auto;
+    }
+    nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        gap: 8px;
+    }
+    header .cart {
+        order: 2;
+        position: absolute;
+        top: 16px;
+        right: 0;
+        width: auto;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    nav a {
+        width: auto;
+        font-size: 13px;
+        padding: 0 6px;
+    }
+}

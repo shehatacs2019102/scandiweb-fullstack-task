@@ -99,3 +99,44 @@
 .thumbnail:hover, .active-thumbnail {
     opacity: 1;
 }
+
+@media screen and (max-width: 900px) {
+    .gallery-container {
+        flex-flow: column nowrap;
+        margin: 0;
+        width: 100%;
+        gap: 12px;
+    }
+    .slider {
+        order: 1;
+        width: 100%;
+        height: auto;
+        margin: 0;
+    }
+    .slider-container {
+        width: calc(100% - 100px);
+    }
+    .slider-container img,
+    .slide {
+        max-width: 100%;
+        max-height: 320px;
+    }
+    .thumbnails {
+        order: 2;
+        flex-flow: row nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        max-height: none;
+        width: 100%;
+        margin: 0;
+    }
+    .thumbnail {
+        flex: 0 0 auto;
+    }
+    .prev {
+        margin-left: 10px;
+    }
+    .next {
+        margin-right: 10px;
+    }
+}
