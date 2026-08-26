@@ -1,2 +1,4 @@
 front/node_modules/
+back-end/.env
+back-end/*.pem
 
