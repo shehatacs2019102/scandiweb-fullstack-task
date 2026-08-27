@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./CartOverlayStyle.css";
+import { getFirstImage } from "../utils/gallery";
 export default class CartItem extends Component {
   constructor(props) {
     super(props);
@@ -166,11 +167,7 @@ export default class CartItem extends Component {
         <img
           className="cart-item-image"
           alt="cart-image"
-          src={Item.gallery
-            .split(" ")
-            .map((url) => url.trim())[0]
-            .replace(/[[\]"]/g, "")
-            .slice(0, -1)}
+          src={getFirstImage(Item.gallery)}
         />
       </div>
     );

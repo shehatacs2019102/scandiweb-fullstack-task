@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "../pages/ProductListingPageStyle.css";
 import { Link } from "react-router-dom";
+import { getFirstImage } from "../utils/gallery";
 export default class OutStockItem extends Component {
   constructor(props) {
     super(props);
@@ -35,11 +36,7 @@ export default class OutStockItem extends Component {
           </div>
 
           <img
-            src={item.gallery
-              .split(" ")
-              .map((url) => url.trim())[0]
-              .replace(/[[\]"]/g, "")
-              .slice(0, -1)}
+            src={getFirstImage(item.gallery)}
             alt={key}
             className="product-image"
           />

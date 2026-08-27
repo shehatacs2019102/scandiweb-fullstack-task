@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import '../pages/ProductListingPageStyle.css'
 import EmptyCart from "../Assets/emptycart.svg";
+import { getFirstImage } from "../utils/gallery";
 export default class InStockItem extends Component {
   constructor(props) {
     super(props);
@@ -25,11 +26,7 @@ export default class InStockItem extends Component {
         >
           <div id={item.id} className={"product-item-inStock"}>
             <img
-              src={item.gallery
-                .split(" ")
-                .map((url) => url.trim())[0]
-                .replace(/[[\]"]/g, "")
-                .slice(0, -1)}
+              src={getFirstImage(item.gallery)}
               alt={item.id}
               className="product-image"
             />

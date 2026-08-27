@@ -28,7 +28,7 @@ if (count(checkDataExists()) < 1) {
         $pdo = new PDO(Database::buildDsn($dbname), $user, $pass, Database::pdoOptions());
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $jsonData = file_get_contents('data.json');
+        $jsonData = file_get_contents(__DIR__ . '/data.json');
         $data = json_decode($jsonData, true);
 
         $categories = $data['data']['categories'];
