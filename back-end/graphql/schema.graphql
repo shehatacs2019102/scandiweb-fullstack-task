@@ -1,0 +1,63 @@
+"The root query type."
+type Query {
+    "All product categories."
+    getCategories: [ProductCategory] @all(model: "Category")
+
+    "Every product, grouped by category."
+    getProducts: ClassifiedProducts @field(resolver: "GetProducts")
+
+    "A single product by its ID."
+    getProductById(id: ID!): Product @field(resolver: "GetProductById")
+}
+
+type Mutation {
+    "Place an order."
+    createOrder(items: String!, total_price: Float!): Order @create
+}
+
+type ProductCategory {
+    "The name of the category."
+    name: String!
+}
+
+"A collection of products classified by category."
+type ClassifiedProducts {
+    "A list of products in the tech category."
+    tech: [Product]
+
+    "A list of products in the clothes category."
+    clothes: [Product]
+}
+
+type Product {
+    id: ID!
+    name: String!
+    description: String
+    "JSON-encoded array of image URLs."
+    gallery: String
+    amount: Float
+    currency_label: String
+    currency_symbol: String
+    in_stock: Boolean
+    brand: String
+    attributes: [ProductAttribute] @method(name: "productAttributes")
+    category: ProductCategory! @belongsTo
+}
+
+type ProductAttribute {
+    "The unique identifier for the attribute."
+    id: ID!
+    "The name of the attribute (e.g., \"Size\")."
+    name: String!
+    "The value of the attribute (e.g., \"Large\")."
+    value: String
+}
+
+type Order {
+    "The unique identifier for the order."
+    id: ID!
+    "A string describing the items in the order."
+    items: String!
+    "The total price of the order."
+    total_price: Float!
+}

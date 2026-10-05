@@ -1,4 +1,7 @@
 back-end/vendor
 back-end/.env
+back-end/*.pem
+back-end/storage/logs/*
+back-end/storage/framework/cache/data/*
+back-end/bootstrap/cache/*.php
 front/
-front/node_modules
